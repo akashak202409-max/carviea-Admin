@@ -5,6 +5,7 @@ import { Patients } from "./pages/Patients"
 import { PatientProfile } from "./pages/PatientProfile"
 import { Providers } from "./pages/Providers"
 import { ProviderProfile } from "./pages/ProviderProfile"
+import { EditProvider } from "./pages/EditProvider"
 import { Specializations } from "./pages/Specializations"
 import { Caretakers } from "./pages/Caretakers"
 import { LabCentres } from "./pages/LabCentres"
@@ -29,6 +30,7 @@ function App() {
           <Route path="patients/:id" element={<PatientProfile />} />
           <Route path="providers" element={<Providers />} />
           <Route path="providers/:id" element={<ProviderProfile />} />
+          <Route path="providers/:id/edit" element={<EditProvider />} />
           <Route path="specializations" element={<Specializations />} />
           <Route path="caretakers" element={<Caretakers />} />
           <Route path="labs" element={<LabCentres />} />
