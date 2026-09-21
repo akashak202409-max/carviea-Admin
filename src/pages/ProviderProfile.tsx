@@ -3,10 +3,14 @@ import { useState } from "react"
 import { Button } from "../components/ui/Button"
 import { Badge } from "../components/ui/Badge"
 import { Card, CardContent } from "../components/ui/Card"
-import { Edit, Ban, CalendarDays, CheckCircle2, Clock, Star, Download, Eye, FileText, CheckCircle, MapPin, Video, Users, Stethoscope } from "lucide-react"
+import { Modal } from "../components/ui/Modal"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/Table"
+import { Edit, Ban, CalendarDays, CheckCircle2, Clock, Star, Download, Eye, FileText, CheckCircle, MapPin, Video, Users, Stethoscope, HandCoins } from "lucide-react"
 
 export function ProviderProfile() {
   const [activeTab, setActiveTab] = useState('Overview');
+  const [isSuspendModalOpen, setSuspendModalOpen] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const tabs = ['Overview', 'Professional', 'Appointments', 'Availability', 'Reviews', 'Payments', 'Documents', 'Activity'];
 
   return (
@@ -64,8 +68,11 @@ export function ProviderProfile() {
                     <Edit className="h-4 w-4 mr-2" /> Edit Profile
                   </Button>
                 </Link>
-                <Button className="w-full text-error border-error/30 hover:bg-red-50 hover:border-error" variant="outline">
+                <Button className="w-full text-error border-error/30 hover:bg-red-50 hover:border-error" variant="outline" onClick={() => setSuspendModalOpen(true)}>
                   <Ban className="h-4 w-4 mr-2" /> Suspend Provider
+                </Button>
+                <Button className="w-full text-charcoal border-slate-200 hover:bg-slate-50" variant="outline" onClick={() => setDeleteModalOpen(true)}>
+                  Delete Provider
                 </Button>
               </div>
             </CardContent>
@@ -249,15 +256,245 @@ export function ProviderProfile() {
             </Card>
           )}
 
-          {activeTab !== 'Overview' && activeTab !== 'Documents' && (
+          {activeTab === 'Appointments' && (
+             <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  {[
+                     { l: "Total", v: "486", icon: CalendarDays, c: "text-brand-600" },
+                     { l: "Upcoming", v: "32", icon: Clock, c: "text-info" },
+                     { l: "Completed", v: "428", icon: CheckCircle2, c: "text-success" },
+                     { l: "Cancelled", v: "26", icon: Ban, c: "text-error" },
+                  ].map(stat => (
+                     <Card key={stat.l}>
+                        <CardContent className="p-4 flex items-center justify-between">
+                           <div>
+                             <p className="text-sm font-medium text-muted">{stat.l}</p>
+                             <p className="text-xl font-bold text-charcoal mt-1">{stat.v}</p>
+                           </div>
+                           <stat.icon className={`h-8 w-8 opacity-20 ${stat.c}`} />
+                        </CardContent>
+                     </Card>
+                  ))}
+                </div>
+                <Table>
+                   <TableHeader>
+                      <TableRow>
+                         <TableHead>Appointment ID</TableHead>
+                         <TableHead>Patient</TableHead>
+                         <TableHead>Date & Time</TableHead>
+                         <TableHead>Type</TableHead>
+                         <TableHead>Amount</TableHead>
+                         <TableHead>Status</TableHead>
+                      </TableRow>
+                   </TableHeader>
+                   <TableBody>
+                      <TableRow>
+                         <TableCell className="text-brand-600 font-medium">APT-10284</TableCell>
+                         <TableCell className="font-medium">Rahul Sharma</TableCell>
+                         <TableCell>21 Sep 2026 <span className="text-muted text-xs block">10:00 AM</span></TableCell>
+                         <TableCell>Online</TableCell>
+                         <TableCell>₹500</TableCell>
+                         <TableCell><Badge variant="success">Completed</Badge></TableCell>
+                      </TableRow>
+                   </TableBody>
+                </Table>
+             </div>
+          )}
+
+          {activeTab === 'Availability' && (
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="text-lg font-bold text-charcoal mb-6">Weekly Schedule</h3>
+                <div className="space-y-4">
+                  {[
+                     { day: "Monday", time: "09:00 AM – 06:00 PM", active: true },
+                     { day: "Tuesday", time: "09:00 AM – 06:00 PM", active: true },
+                     { day: "Wednesday", time: "09:00 AM – 06:00 PM", active: true },
+                     { day: "Thursday", time: "09:00 AM – 06:00 PM", active: true },
+                     { day: "Friday", time: "09:00 AM – 06:00 PM", active: true },
+                     { day: "Saturday", time: "09:00 AM – 02:00 PM", active: true },
+                     { day: "Sunday", time: "Unavailable", active: false },
+                  ].map(sch => (
+                     <div key={sch.day} className="flex justify-between items-center py-3 border-b border-slate-100 last:border-0">
+                        <span className="font-medium text-charcoal w-32">{sch.day}</span>
+                        {sch.active ? (
+                           <span className="text-muted bg-slate-50 px-3 py-1 rounded-lg text-sm">{sch.time}</span>
+                        ) : (
+                           <span className="text-error bg-red-50 px-3 py-1 rounded-lg text-sm font-medium">{sch.time}</span>
+                        )}
+                     </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeTab === 'Reviews' && (
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="text-lg font-bold text-charcoal mb-6">Reviews & Ratings</h3>
+                <div className="flex flex-col md:flex-row gap-8 mb-8 border-b border-slate-100 pb-8">
+                   <div className="flex flex-col items-center justify-center bg-slate-50 rounded-xl p-6 md:w-1/3">
+                      <p className="text-5xl font-bold text-charcoal mb-2">4.8</p>
+                      <div className="flex items-center text-warning mb-2">
+                         <Star className="h-5 w-5 fill-warning"/>
+                         <Star className="h-5 w-5 fill-warning"/>
+                         <Star className="h-5 w-5 fill-warning"/>
+                         <Star className="h-5 w-5 fill-warning"/>
+                         <Star className="h-5 w-5 fill-warning opacity-30"/>
+                      </div>
+                      <p className="text-sm text-muted">Based on 126 reviews</p>
+                   </div>
+                   <div className="md:w-2/3 space-y-3">
+                      {[
+                         { stars: 5, pct: "88%", width: "w-[88%]" },
+                         { stars: 4, pct: "8%", width: "w-[8%]" },
+                         { stars: 3, pct: "3%", width: "w-[3%]" },
+                         { stars: 2, pct: "1%", width: "w-[1%]" },
+                         { stars: 1, pct: "0%", width: "w-[0%]" },
+                      ].map(bar => (
+                         <div key={bar.stars} className="flex items-center text-sm">
+                            <span className="w-12 text-muted font-medium">{bar.stars} Star</span>
+                            <div className="flex-1 mx-3 h-2 bg-slate-100 rounded-full overflow-hidden">
+                               <div className={`h-full bg-warning ${bar.width}`}></div>
+                            </div>
+                            <span className="w-8 text-right text-muted">{bar.pct}</span>
+                         </div>
+                      ))}
+                   </div>
+                </div>
+
+                <div className="space-y-6">
+                   <div className="pb-6 border-b border-slate-100 last:border-0">
+                      <div className="flex justify-between items-start mb-2">
+                         <span className="font-medium text-charcoal">Sanjay M.</span>
+                         <span className="text-xs text-muted">21 Sep 2026</span>
+                      </div>
+                      <div className="flex items-center text-warning mb-3">
+                         <Star className="h-3 w-3 fill-warning"/><Star className="h-3 w-3 fill-warning"/><Star className="h-3 w-3 fill-warning"/><Star className="h-3 w-3 fill-warning"/><Star className="h-3 w-3 fill-warning"/>
+                      </div>
+                      <p className="text-sm text-charcoal leading-relaxed">"Very patient and understanding. The online consultation was smooth and helpful. Highly recommended."</p>
+                   </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeTab === 'Payments' && (
+             <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  {[
+                     { l: "Total Earnings", v: "₹4.82L", icon: HandCoins, c: "text-success", bg: "bg-green-50" },
+                     { l: "This Month", v: "₹68,400", icon: CheckCircle2, c: "text-brand-600", bg: "bg-brand-50" },
+                     { l: "Pending Payout", v: "₹12,500", icon: Clock, c: "text-warning", bg: "bg-amber-50" },
+                     { l: "Commission", v: "₹48,200", icon: Ban, c: "text-charcoal", bg: "bg-slate-100" },
+                  ].map(stat => (
+                     <Card key={stat.l}>
+                        <CardContent className="p-5 relative overflow-hidden">
+                           <div className={`h-10 w-10 rounded-full mb-3 ${stat.bg} flex items-center justify-center ${stat.c}`}>
+                              <stat.icon className="h-5 w-5" />
+                           </div>
+                           <p className="text-2xl font-bold text-charcoal">{stat.v}</p>
+                           <p className="text-sm text-muted mt-1">{stat.l}</p>
+                        </CardContent>
+                     </Card>
+                  ))}
+                </div>
+                <Table>
+                   <TableHeader>
+                      <TableRow>
+                         <TableHead>Transaction ID</TableHead>
+                         <TableHead>Appointment</TableHead>
+                         <TableHead>Amount</TableHead>
+                         <TableHead>Commission</TableHead>
+                         <TableHead>Net Earnings</TableHead>
+                         <TableHead>Status</TableHead>
+                      </TableRow>
+                   </TableHeader>
+                   <TableBody>
+                      <TableRow>
+                         <TableCell className="text-brand-600 font-medium">TXN-98273</TableCell>
+                         <TableCell className="text-muted">APT-10284</TableCell>
+                         <TableCell>₹500</TableCell>
+                         <TableCell className="text-error">-₹50</TableCell>
+                         <TableCell className="font-semibold">₹450</TableCell>
+                         <TableCell><Badge variant="success">Paid</Badge></TableCell>
+                      </TableRow>
+                   </TableBody>
+                </Table>
+             </div>
+          )}
+
+          {activeTab === 'Activity' && (
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="text-lg font-bold text-charcoal mb-6">Provider Activity</h3>
+                <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
+                  {[
+                     { date: "21 Sep 2026", time: "11:32 AM", title: "Provider profile updated", desc: "Updated consultation fees and working hours.", icon: Edit, color: "text-brand-600", bg: "bg-brand-50" },
+                     { date: "20 Sep 2026", time: "04:15 PM", title: "Appointment completed", desc: "Completed online consultation with Rahul Sharma.", icon: CheckCircle2, color: "text-success", bg: "bg-green-50" },
+                     { date: "15 Sep 2026", time: "09:00 AM", title: "Provider verified", desc: "Super Admin approved the submitted documents.", icon: ShieldCheck, color: "text-success", bg: "bg-green-50" },
+                     { date: "10 Sep 2026", time: "02:20 PM", title: "Registration submitted", desc: "Provider created an account and submitted documents.", icon: FileText, color: "text-charcoal", bg: "bg-slate-100" }
+                  ].map((act, idx) => (
+                    <div key={idx} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                      <div className={`flex items-center justify-center w-10 h-10 rounded-full border-4 border-white ${act.bg} ${act.color} shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-sm z-10`}>
+                        <act.icon className="h-4 w-4" />
+                      </div>
+                      <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border border-slate-100 bg-white shadow-sm">
+                        <div className="flex items-center justify-between space-x-2 mb-1">
+                          <div className="font-bold text-charcoal">{act.title}</div>
+                          <time className="font-medium text-xs text-muted">{act.date}</time>
+                        </div>
+                        <div className="text-sm text-muted">{act.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeTab === 'Professional' && (
              <Card>
                 <CardContent className="p-12 text-center">
-                   <p className="text-muted">The {activeTab} tab content would be displayed here.</p>
+                   <p className="text-muted">The Professional tab contents are displayed on the Overview tab for this view.</p>
                 </CardContent>
              </Card>
           )}
         </div>
       </div>
+      
+      {/* Modals */}
+      <Modal isOpen={isSuspendModalOpen} onClose={() => setSuspendModalOpen(false)} title="Suspend Provider">
+         <div className="space-y-4">
+            <p className="text-sm text-muted">Suspending this provider will prevent new appointments and consultations.</p>
+            <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+               <div className="h-10 w-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 font-bold">PS</div>
+               <div>
+                  <p className="font-medium text-charcoal text-sm">Dr. Priya Sharma</p>
+                  <p className="text-xs text-muted">DOC-10284</p>
+               </div>
+            </div>
+            <div className="space-y-2">
+               <label className="text-sm font-medium text-charcoal">Reason for suspension</label>
+               <textarea className="w-full border border-slate-200 rounded-lg p-3 bg-white min-h-24 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="Enter reason..."></textarea>
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+               <Button variant="outline" onClick={() => setSuspendModalOpen(false)}>Cancel</Button>
+               <Button className="bg-error hover:bg-red-700 text-white" onClick={() => setSuspendModalOpen(false)}>Suspend Provider</Button>
+            </div>
+         </div>
+      </Modal>
+
+      <Modal isOpen={isDeleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Delete Provider?">
+         <div className="space-y-4">
+            <p className="text-sm text-muted">This action cannot be undone. The provider account and associated administrative data may be permanently removed.</p>
+            <div className="flex justify-end gap-2 pt-2">
+               <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>Cancel</Button>
+               <Button className="bg-error hover:bg-red-700 text-white" onClick={() => setDeleteModalOpen(false)}>Delete Provider</Button>
+            </div>
+         </div>
+      </Modal>
     </div>
   )
 }
