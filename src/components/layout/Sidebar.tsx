@@ -5,7 +5,7 @@ import {
   HeartHandshake, FlaskConical, Stethoscope as ServicesIcon,
   CalendarDays, Video, Clock, Siren,
   CreditCard, ArrowRightLeft, Undo2, HandCoins,
-  Settings, ChevronRight
+  ChevronRight
 } from "lucide-react"
 
 const mainNav = [

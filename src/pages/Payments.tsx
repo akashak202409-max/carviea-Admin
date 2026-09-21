@@ -1,7 +1,7 @@
 import { Button } from "../components/ui/Button"
 import { Badge } from "../components/ui/Badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/Table"
-import { Search, Filter, Download, IndianRupee, CreditCard, Wallet, Landmark } from "lucide-react"
+import { Search, Filter, Download } from "lucide-react"
 
 export function Payments() {
   return (

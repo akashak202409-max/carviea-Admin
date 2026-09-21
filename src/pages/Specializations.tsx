@@ -1,6 +1,6 @@
 import { Button } from "../components/ui/Button"
 import { Badge } from "../components/ui/Badge"
-import { Search, Plus, Stethoscope, Heart, Activity, Baby, Bone, Brain, Droplet, Eye, ShieldAlert } from "lucide-react"
+import { Plus, Stethoscope, Heart, Activity, Baby, Bone, Brain, Droplet, Eye } from "lucide-react"
 
 const specializations = [
   { name: "General Medicine", providers: 124, appointments: 2450, status: "Active", icon: Stethoscope },

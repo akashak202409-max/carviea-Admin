@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import { Button } from "../components/ui/Button"
 import { Badge } from "../components/ui/Badge"
 import { Card, CardContent } from "../components/ui/Card"
-import { ChevronRight, Edit, Ban, CalendarDays, CheckCircle2, XCircle, Clock, IndianRupee } from "lucide-react"
+import { ChevronRight, Edit, Ban, CalendarDays, CheckCircle2, Clock, IndianRupee } from "lucide-react"
 
 export function PatientProfile() {
   return (

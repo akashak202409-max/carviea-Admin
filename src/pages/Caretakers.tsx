@@ -1,7 +1,7 @@
 import { Button } from "../components/ui/Button"
 import { Badge } from "../components/ui/Badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/Table"
-import { Search, Filter, Plus, HeartHandshake, CheckCircle2, Users, Star } from "lucide-react"
+import { Plus, HeartHandshake, CheckCircle2, Users, Star } from "lucide-react"
 
 export function Caretakers() {
   return (

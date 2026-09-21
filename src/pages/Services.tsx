@@ -1,6 +1,6 @@
 import { Button } from "../components/ui/Button"
 import { Badge } from "../components/ui/Badge"
-import { Plus, Stethoscope, HeartHandshake, FlaskConical, Users, Pill, Leaf, FileText } from "lucide-react"
+import { Plus, Stethoscope, HeartHandshake, FlaskConical, Users, Pill, Leaf } from "lucide-react"
 
 const services = [
   { name: "Doctor Consultation", desc: "Online doctor consultation with certified healthcare professionals.", price: "₹499", bookings: "1,284", status: "Active", icon: Stethoscope },
