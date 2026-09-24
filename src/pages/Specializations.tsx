@@ -1,5 +1,7 @@
+import { useState } from "react"
 import { Button } from "../components/ui/Button"
 import { Badge } from "../components/ui/Badge"
+import { Modal } from "../components/ui/Modal"
 import { Plus, Stethoscope, Heart, Activity, Baby, Bone, Brain, Droplet, Eye } from "lucide-react"
 
 const specializations = [
@@ -14,6 +16,8 @@ const specializations = [
 ]
 
 export function Specializations() {
+  const [isAddModalOpen, setAddModalOpen] = useState(false);
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -22,7 +26,7 @@ export function Specializations() {
           <p className="text-muted mt-1">Manage healthcare specializations available on Carevia.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button>
+          <Button onClick={() => setAddModalOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Add Specialization
           </Button>
         </div>
@@ -46,8 +50,8 @@ export function Specializations() {
         {specializations.map((spec) => (
           <div key={spec.name} className="bg-surface border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col">
             <div className="flex justify-between items-start mb-4">
-              <div className="h-12 w-12 rounded-xl bg-brand-50 flex items-center justify-center text-brand-600">
-                <spec.icon className="h-6 w-6" />
+              <div className="h-12 w-12 rounded-full bg-brand-50 flex items-center justify-center text-brand-600">
+                <spec.icon className="h-5 w-5" />
               </div>
               <Badge variant={spec.status === "Active" ? "success" : "default"}>{spec.status}</Badge>
             </div>
@@ -65,13 +69,49 @@ export function Specializations() {
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-100 flex gap-2">
-              <Button variant="outline" className="flex-1">Edit</Button>
-              <Button variant="outline" className="flex-1 text-error hover:bg-red-50 hover:text-red-700">Disable</Button>
+            <div className="mt-6 flex gap-2">
+              <Button variant="outline" className="flex-1 border-slate-200 text-charcoal font-medium hover:bg-slate-50">Edit</Button>
+              <Button variant="outline" className="flex-1 text-error border-slate-200 hover:bg-red-50 hover:text-error hover:border-error/30 font-medium">Disable</Button>
             </div>
           </div>
         ))}
       </div>
+
+      <Modal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} title="Add Specialization">
+         <div className="space-y-4">
+            <div className="space-y-2">
+               <label className="text-sm font-medium text-charcoal block">Specialization Name</label>
+               <input type="text" className="w-full border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="e.g. Pulmonology" />
+            </div>
+            <div className="space-y-2">
+               <label className="text-sm font-medium text-charcoal block">Description</label>
+               <textarea className="w-full border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 min-h-24 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="Brief description of the specialization..."></textarea>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+               <div className="space-y-2">
+                  <label className="text-sm font-medium text-charcoal block">Icon</label>
+                  <select className="w-full border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                     <option>Lungs</option>
+                     <option>Stethoscope</option>
+                     <option>Heart</option>
+                     <option>Brain</option>
+                     <option>Bone</option>
+                  </select>
+               </div>
+               <div className="space-y-2">
+                  <label className="text-sm font-medium text-charcoal block">Status</label>
+                  <select className="w-full border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                     <option>Active</option>
+                     <option>Inactive</option>
+                  </select>
+               </div>
+            </div>
+            <div className="pt-4 border-t border-slate-100 flex justify-end gap-2">
+               <Button variant="outline" onClick={() => setAddModalOpen(false)}>Cancel</Button>
+               <Button className="bg-brand-600 hover:bg-brand-700 text-white" onClick={() => setAddModalOpen(false)}>Save Specialization</Button>
+            </div>
+         </div>
+      </Modal>
     </div>
   )
 }
