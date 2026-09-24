@@ -3,11 +3,13 @@ import { useState } from "react"
 import { Button } from "../components/ui/Button"
 import { Badge } from "../components/ui/Badge"
 import { Card, CardContent } from "../components/ui/Card"
+import { Modal } from "../components/ui/Modal"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/Table"
-import { ChevronRight, Edit, Ban, CalendarDays, CheckCircle2, Clock, IndianRupee, Video, Download, Eye, FileText, AlertTriangle } from "lucide-react"
+import { ChevronRight, Edit, Ban, CalendarDays, CheckCircle2, Clock, IndianRupee, Video, Download, Eye, FileText, AlertTriangle, FileSignature, Stethoscope } from "lucide-react"
 
 export function PatientProfile() {
   const [activeTab, setActiveTab] = useState('Overview');
+  const [isSummaryModalOpen, setSummaryModalOpen] = useState(false);
   const tabs = ['Overview', 'Appointments', 'Consultations', 'Medical History', 'Payments', 'Documents'];
 
   return (
@@ -197,11 +199,11 @@ export function PatientProfile() {
                 <Table>
                    <TableHeader>
                       <TableRow>
-                         <TableHead>Consultation ID</TableHead>
-                         <TableHead>Doctor</TableHead>
-                         <TableHead>Date</TableHead>
-                         <TableHead>Duration</TableHead>
-                         <TableHead>Action</TableHead>
+                         <TableHead>CONSULTATION ID</TableHead>
+                         <TableHead>DOCTOR</TableHead>
+                         <TableHead>DATE</TableHead>
+                         <TableHead>DURATION</TableHead>
+                         <TableHead>ACTION</TableHead>
                       </TableRow>
                    </TableHeader>
                    <TableBody>
@@ -210,12 +212,25 @@ export function PatientProfile() {
                          <TableCell className="font-medium">Dr. Priya Sharma</TableCell>
                          <TableCell>21 Sep 2026</TableCell>
                          <TableCell>
-                           <div className="flex items-center gap-1.5">
+                           <div className="flex items-center gap-1.5 font-medium text-charcoal">
                              <Video className="h-4 w-4 text-muted" /> 18 min
                            </div>
                          </TableCell>
                          <TableCell>
-                           <Button variant="outline" size="sm" className="h-8">View Summary</Button>
+                           <Button variant="outline" size="sm" className="h-8 border-slate-200 text-charcoal font-medium hover:bg-slate-50" onClick={() => setSummaryModalOpen(true)}>View Summary</Button>
+                         </TableCell>
+                      </TableRow>
+                      <TableRow>
+                         <TableCell className="text-brand-600 font-medium">CON-8410</TableCell>
+                         <TableCell className="font-medium">Dr. Rahul Sharma</TableCell>
+                         <TableCell>15 Sep 2026</TableCell>
+                         <TableCell>
+                           <div className="flex items-center gap-1.5 font-medium text-charcoal">
+                             <Video className="h-4 w-4 text-muted" /> 24 min
+                           </div>
+                         </TableCell>
+                         <TableCell>
+                           <Button variant="outline" size="sm" className="h-8 border-slate-200 text-charcoal font-medium hover:bg-slate-50" onClick={() => setSummaryModalOpen(true)}>View Summary</Button>
                          </TableCell>
                       </TableRow>
                    </TableBody>
@@ -327,6 +342,47 @@ export function PatientProfile() {
 
         </div>
       </div>
+
+      <Modal isOpen={isSummaryModalOpen} onClose={() => setSummaryModalOpen(false)} title="Consultation Summary">
+         <div className="space-y-6">
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
+               <div>
+                  <p className="text-sm font-medium text-charcoal">CON-8472</p>
+                  <p className="text-xs text-muted">21 Sep 2026</p>
+               </div>
+               <div className="text-right">
+                  <p className="text-sm font-medium text-charcoal">Dr. Priya Sharma</p>
+                  <p className="text-xs text-muted">Skin & Allergy</p>
+               </div>
+            </div>
+
+            <div className="space-y-4">
+               <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted mb-2 flex items-center gap-1.5"><Stethoscope className="h-3 w-3" /> Symptoms</h4>
+                  <p className="text-sm text-charcoal">Patient reported mild skin rash and itching on the forearms for the past 3 days. No fever or other systemic symptoms.</p>
+               </div>
+               
+               <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted mb-2 flex items-center gap-1.5"><CheckCircle2 className="h-3 w-3" /> Diagnosis</h4>
+                  <p className="text-sm text-charcoal">Contact Dermatitis (Mild)</p>
+               </div>
+
+               <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted mb-2 flex items-center gap-1.5"><FileSignature className="h-3 w-3" /> Prescription & Advice</h4>
+                  <ul className="list-disc pl-4 text-sm text-charcoal space-y-1">
+                     <li>Apply Calamine lotion twice daily for 5 days.</li>
+                     <li>Avoid contact with harsh soaps or detergents.</li>
+                     <li>Take prescribed antihistamine if itching persists at night.</li>
+                  </ul>
+               </div>
+            </div>
+
+            <div className="pt-4 border-t border-slate-100 flex justify-end gap-2">
+               <Button variant="outline" onClick={() => setSummaryModalOpen(false)}>Close</Button>
+               <Button className="bg-brand-600 hover:bg-brand-700 text-white"><Download className="h-4 w-4 mr-2"/> Download PDF</Button>
+            </div>
+         </div>
+      </Modal>
     </div>
   )
 }
