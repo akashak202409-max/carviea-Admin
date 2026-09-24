@@ -10,7 +10,15 @@ import { ChevronRight, Edit, Ban, CalendarDays, CheckCircle2, Clock, IndianRupee
 export function PatientProfile() {
   const [activeTab, setActiveTab] = useState('Overview');
   const [isSummaryModalOpen, setSummaryModalOpen] = useState(false);
+  const [isDocumentModalOpen, setDocumentModalOpen] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<{name: string, date: string, type?: string} | null>(null);
+  
   const tabs = ['Overview', 'Appointments', 'Consultations', 'Medical History', 'Payments', 'Documents'];
+
+  const handleViewDocument = (doc: {name: string, date: string, type?: string}) => {
+     setSelectedDocument(doc);
+     setDocumentModalOpen(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -311,9 +319,9 @@ export function PatientProfile() {
                 <h3 className="text-lg font-bold text-charcoal mb-4">Patient Documents & Reports</h3>
                 <div className="space-y-4">
                   {[
-                    { name: "CBC Test Report.pdf", date: "02 Sep 2026" },
-                    { name: "Prescription_DrPriya.pdf", date: "21 Sep 2026" },
-                    { name: "Past_Medical_Records.zip", date: "10 Aug 2026" }
+                    { name: "CBC Test Report.pdf", date: "02 Sep 2026", type: "pdf" },
+                    { name: "Prescription_DrPriya.pdf", date: "21 Sep 2026", type: "pdf" },
+                    { name: "Past_Medical_Records.zip", date: "10 Aug 2026", type: "zip" }
                   ].map((doc, idx) => (
                     <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border border-slate-200 rounded-xl gap-4">
                       <div className="flex items-center gap-3">
@@ -326,7 +334,12 @@ export function PatientProfile() {
                         </div>
                       </div>
                       <div className="flex gap-2 w-full sm:w-auto">
-                        <Button variant="outline" size="sm" className="h-8 px-3 flex-1 sm:flex-none">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="h-8 px-3 flex-1 sm:flex-none"
+                          onClick={() => handleViewDocument(doc)}
+                        >
                           <Eye className="h-4 w-4 mr-2" /> View
                         </Button>
                         <Button variant="outline" size="sm" className="h-8 px-3 flex-1 sm:flex-none">
@@ -381,6 +394,65 @@ export function PatientProfile() {
                <Button variant="outline" onClick={() => setSummaryModalOpen(false)}>Close</Button>
                <Button className="bg-brand-600 hover:bg-brand-700 text-white"><Download className="h-4 w-4 mr-2"/> Download PDF</Button>
             </div>
+         </div>
+      </Modal>
+
+      <Modal isOpen={isDocumentModalOpen} onClose={() => setDocumentModalOpen(false)} title="Document Viewer">
+         <div className="space-y-4">
+            {selectedDocument && (
+              <>
+                <div className="flex items-center justify-between bg-slate-50 p-3 rounded-lg border border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-brand-600" />
+                    <span className="font-medium text-charcoal text-sm">{selectedDocument.name}</span>
+                  </div>
+                  <Badge variant="default" className="bg-slate-200 text-slate-700">{selectedDocument.date}</Badge>
+                </div>
+                
+                {selectedDocument.type === 'zip' ? (
+                   <div className="bg-slate-50 border border-slate-200 rounded-xl h-64 flex flex-col items-center justify-center text-center p-6">
+                      <div className="h-16 w-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4">
+                         <Download className="h-8 w-8 text-brand-500" />
+                      </div>
+                      <h4 className="font-bold text-charcoal mb-1">ZIP Archive</h4>
+                      <p className="text-sm text-muted max-w-xs mb-4">This file format cannot be previewed directly in the browser. Please download to extract and view contents.</p>
+                      <Button className="bg-brand-600 hover:bg-brand-700 text-white">Download ZIP</Button>
+                   </div>
+                ) : (
+                   <div className="bg-slate-100 border border-slate-200 rounded-xl h-96 flex flex-col items-center justify-center text-center p-6 relative overflow-hidden">
+                      {/* Fake PDF Header / Viewer Mockup */}
+                      <div className="absolute top-0 left-0 right-0 bg-slate-700 text-slate-200 p-2 text-xs flex justify-between items-center">
+                         <span className="truncate max-w-[200px]">{selectedDocument.name}</span>
+                         <div className="flex gap-3">
+                            <span>1 / 1</span>
+                            <span>100%</span>
+                         </div>
+                      </div>
+                      <div className="bg-white w-3/4 h-5/6 mt-8 shadow-sm p-6 text-left border border-slate-200 relative overflow-hidden">
+                         <div className="w-1/3 h-4 bg-slate-200 rounded mb-6"></div>
+                         <div className="w-full h-2 bg-slate-100 rounded mb-2"></div>
+                         <div className="w-full h-2 bg-slate-100 rounded mb-2"></div>
+                         <div className="w-5/6 h-2 bg-slate-100 rounded mb-8"></div>
+                         <div className="w-1/4 h-3 bg-slate-200 rounded mb-4"></div>
+                         <div className="w-full h-2 bg-slate-100 rounded mb-2"></div>
+                         <div className="w-full h-2 bg-slate-100 rounded mb-2"></div>
+                         <div className="w-4/6 h-2 bg-slate-100 rounded mb-8"></div>
+                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center opacity-40 pointer-events-none">
+                            <FileText className="h-12 w-12 text-slate-400 mb-2" />
+                            <span className="text-slate-500 font-semibold tracking-widest uppercase">Document Preview</span>
+                         </div>
+                      </div>
+                   </div>
+                )}
+                
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button variant="outline" onClick={() => setDocumentModalOpen(false)}>Close</Button>
+                  {selectedDocument.type !== 'zip' && (
+                     <Button className="bg-brand-600 hover:bg-brand-700 text-white"><Download className="h-4 w-4 mr-2"/> Download File</Button>
+                  )}
+                </div>
+              </>
+            )}
          </div>
       </Modal>
     </div>
